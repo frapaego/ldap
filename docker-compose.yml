@@ -1,0 +1,27 @@
+version: '2'
+services:
+ ldap:
+    command: --loglevel debug
+    build: ./openldap
+    image: osixia/openldap
+    container_name: ldap
+    hostname: ldap
+    environment:
+      LDAP_DOMAIN: com
+    ports:
+    - "389:389"
+    - "636:636"
+    
+# https://github.com/osixia/docker-phpLDAPadmin
+ phpldapadmin:
+    image: osixia/phpldapadmin
+    container_name: phpldapadmin
+    hostname: phpldapadmin
+    domainname: phpldapadmin.locadomain
+    environment:
+      - PHPLDAPADMIN_LDAP_HOSTS=ldap
+    links:
+    - ldap
+    ports:
+    - "9443:443"
+    - "9080:80"
